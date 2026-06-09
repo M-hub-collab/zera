@@ -24,7 +24,10 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import type { Product, ProductComponent, ProductIngredient, ProductStatus } from "./product-types"
 import { Card } from "@/components/ui/card"
 
-const BACKEND_BASE_URL = "http://localhost:6000"
+// NOTE: Do not point this at port 6000 — browsers block it as an unsafe port
+// (it is the X11 port), which makes fetch() fail with "Failed to fetch".
+// Override via NEXT_PUBLIC_API_BASE_URL; defaults to the backend's safe port.
+const BACKEND_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:5005"
 
 type CategoryRow = {
   name?: string
