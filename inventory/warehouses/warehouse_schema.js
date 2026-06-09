@@ -5,7 +5,7 @@ async function createWarehouseTable()
     try
     {
         // const query = `CREATE TABLE warehouses(
-        //     sno int primary key auto_increment,
+        //     sno SERIAL PRIMARY KEY,
         //     name varchar(100),
         //     phone varchar(12),
         //     address1 text,
@@ -18,8 +18,8 @@ async function createWarehouseTable()
         //     capcity varchar(50),
         //     default_address boolean default false,
         //     created_by varchar(100),
-        //     created_at datetime default current_timestamp,
-        //     updated_at datetime default current_timestamp on update current_timestamp
+        //     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        //     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         // )`
         const query = 'alter table warehouses add column currentStock int'
         const [result] = await pool.query(query)

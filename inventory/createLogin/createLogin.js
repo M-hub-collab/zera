@@ -11,7 +11,7 @@ export const createLogin = async(req, res)=>
 
         const hashPassword = await bcrpt.hash(password, saltRounds)
 
-        const query = `INSERT INTO admins(username, password) values(?,?)`;
+        const query = `INSERT INTO admins(username, password) values($1,$2)`;
         await pool.query(query, [username, hashPassword])
         console.log("New Admin created successfully")
     }

@@ -19,6 +19,7 @@ app.use(cookieParser())
 app.use(cors({
     origin : [
         'http://localhost:3000',
+        'http://localhost:3001',
         'http://72.61.225.131:3010'
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],

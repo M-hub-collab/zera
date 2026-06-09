@@ -9,11 +9,11 @@ export const addNewCategory = async(req, res)=>
         const token = req.cookies._zerakey
         const username = jwt.decode(token).username
 
-        const query = 'INSERT INTO categories(name, slug, description, isActive, created_by) values(?,?,?,?,?)'
+        const query = 'INSERT INTO categories(name, slug, description, isActive, created_by) values($1,$2,$3,$4,$5)'
         const values = [data.name, data.slug, data.description, data.isActive, username]
 
-        const [result] = await pool.query(query, values)
-        if(result.affectedRows>0)
+        const result = await pool.query(query, values)
+        if(result.rowCount>0)
         {
             return res.status(201).json({message : 'Category Added✅'})
         }
@@ -37,11 +37,11 @@ export const editCategory = async(req, res)=>
         const token = req.cookies._zerakey
         const username = jwt.decode(token).username
 
-        const query = 'update categories set name=?, slug=?, description=?, isActive=?, created_by=? where sno=?'
+        const query = 'update categories set name=$1, slug=$2, description=$3, isActive=$4, created_by=$5 where sno=$6'
         const values = [data.name, data.slug, data.description, data.isActive, username, data.sno]
 
-        const [result] = await pool.query(query, values)
-        if(result.affectedRows>0)
+        const result = await pool.query(query, values)
+        if(result.rowCount>0)
         {
             return res.status(201).json({message : 'Category Updated✅'})
         }
@@ -65,11 +65,11 @@ export const deleteCategory = async(req, res)=>
         const token = req.cookies._zerakey
         const username = jwt.decode(token).username
 
-        const query = 'delete from categories where sno=?'
+        const query = 'delete from categories where sno=$1'
         const values = [data.sno]
 
-        const [result] = await pool.query(query, values)
-        if(result.affectedRows>0)
+        const result = await pool.query(query, values)
+        if(result.rowCount>0)
         {
             return res.status(201).json({message : 'Category Deleted 🚮'})
         }
@@ -93,11 +93,11 @@ export const toggleActiveInactive = async(req, res)=>
         const token = req.cookies._zerakey
         const username = jwt.decode(token).username
 
-        const query = 'update categories set isActive=?, created_by=? where sno=?'
+        const query = 'update categories set isActive=$1, created_by=$2 where sno=$3'
         const values = [data.isActive, username, data.sno]
 
-        const [result] = await pool.query(query, values)
-        if(result.affectedRows>0)
+        const result = await pool.query(query, values)
+        if(result.rowCount>0)
         {
             return res.status(201).json({message : 'Success'})
         }
@@ -118,10 +118,10 @@ export const getAllCategories = async(req, res)=>
     try
     {
         const query = 'SELECT * FROM categories'
-        const [result] = await pool.query(query)
-        if(result.length>0)
+        const result = await pool.query(query)
+        if(result.rows.length>0)
         {
-            return res.status(201).json({data : result})
+            return res.status(201).json({data : result.rows})
         }
         else
         {

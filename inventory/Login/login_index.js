@@ -15,19 +15,19 @@ export const adminLogin = async(req, res)=>
         const deviceInfo = parser.getResult()
 
         // checking whether user exists or not
-        const [result] = await pool.query('SELECT * FROM admins WHERE username=?', [username])
-        if(result.length === 0) return res.status(400).json({message : 'No user found'})
+        const result = await pool.query('SELECT * FROM admins WHERE username=$1', [username])
+        if(result.rows.length === 0) return res.status(400).json({message : 'No user found'})
 
-        const user = result[0];
+        const user = result.rows[0];
         const isMatch = await bcrypt.compare(password, user.password);
         if(!isMatch) return res.status(401).json({message : 'Invalid Password'})
 
-        if(result.length === 0) return res.status(404).json({message : 'User not found'})
+        if(result.rows.length === 0) return res.status(404).json({message : 'User not found'})
         const token = jwt.sign({userId : user.sno, username:user.username}, process.env.JWT_SECRET, {expiresIn : '2h'})
 
-        const insertQuery = `INSERT INTO admin_sessions(admin_id, token, ip, device) values(?,?,?,?)`
-        const [insertQuery_result] = await pool.query(insertQuery, [user.sno, token, ip, `${deviceInfo.browser.name} on ${deviceInfo.os.name}`])
-        if(insertQuery_result.affectedRows>0)
+        const insertQuery = `INSERT INTO admin_sessions(admin_id, token, ip, device) values($1,$2,$3,$4)`
+        const insertResult = await pool.query(insertQuery, [user.sno, token, ip, `${deviceInfo.browser.name} on ${deviceInfo.os.name}`])
+        if(insertResult.rowCount>0)
         {
             res.cookie('_zerakey', token,{
                 httpOnly : true,

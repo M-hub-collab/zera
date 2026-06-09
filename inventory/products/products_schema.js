@@ -5,11 +5,11 @@ async function createProductsTable()
     try
     {
         const query = `CREATE TABLE products(
-            sno int primary key auto_increment,
+            sno SERIAL PRIMARY KEY,
             name varchar(100),
             category varchar(100),
             stock int,
-            expiry_date datetime,
+            expiry_date TIMESTAMP,
             mrp varchar(10),
             discount varchar(10),
             warehouse  text,
@@ -27,10 +27,10 @@ async function createProductsTable()
             how_to_use text,
             isActive boolean,
             created_by varchar(100),
-            created_at datetime default current_timestamp,
-            updated_at datetime default current_timestamp on update current_timestamp
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )`
-        const [result] = await pool.query(query)
+        const result = await pool.query(query)
         console.log("Result : ", result)
     }
     catch(error)
