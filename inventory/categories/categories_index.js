@@ -119,14 +119,7 @@ export const getAllCategories = async(req, res)=>
     {
         const query = 'SELECT * FROM categories'
         const result = await pool.query(query)
-        if(result.rows.length>0)
-        {
-            return res.status(201).json({data : result.rows})
-        }
-        else
-        {
-            return res.status(401).json({message : 'Failed to get categories'})
-        }
+        return res.status(200).json({data : result.rows})
     }
     catch(error)
     {

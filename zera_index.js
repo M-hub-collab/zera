@@ -10,7 +10,10 @@ import product_routes from './routes/product_routes.js'
 dotenv.config()
 
 const app = express()
-const PORT = process.env.PORT || 6000
+// NOTE: Do not use port 6000 here. Browsers (Chrome/Firefox) block port 6000
+// as an unsafe port (it is the X11 port), which makes frontend fetch() calls
+// fail with "Failed to fetch". Use a safe port such as 5005.
+const PORT = process.env.PORT || 5005
 
 // parse data as json
 app.use(express.json())
@@ -20,6 +23,7 @@ app.use(cors({
     origin : [
         'http://localhost:3000',
         'http://localhost:3001',
+        'http://localhost:3002',
         'http://72.61.225.131:3010'
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],

@@ -82,18 +82,12 @@ export const getAllWarehouses = async(req, res)=>
     {
         const query = 'select * from warehouses'
         const result = await pool.query(query)
-        if(result.rows.length>0)
-        {
-            return res.status(200).json({data : result.rows})
-        }
-        else
-        {
-            return res.status(401).json({message : 'Unable to fetch Warehouses'})
-        }
+        return res.status(200).json({data : result.rows})
     }   
     catch(error)
     {
         console.log("Error is : ", error)
+        return res.status(500).json({message : 'Unable to fetch Warehouses'})
     }
 }
 
